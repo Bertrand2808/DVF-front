@@ -1,9 +1,16 @@
 import { useState } from "react"
 
 export default function Formulaire() {
-  const [latitude, setLatitude] = useState()
-  const [longitude, setLongitude] = useState()
-  const [rayon, setRayon] = useState()
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
+  const [rayon, setRayon] = useState('')
+
+  const handleSubmit = ev => {
+    ev.preventDefault()
+    console.log('latitude', latitude)
+    console.log('longitude', longitude)
+    console.log('rayon', rayon)
+  }
 
   return (
     <div className=''>
@@ -11,7 +18,7 @@ export default function Formulaire() {
         <h1>Explorateur de données de valeurs foncières</h1>
       </div>
       <div className='bg-blue-50 h-screen flex items-center'>
-        <form className="w-64 mx-auto p-2 mb-12">
+        <form className="w-64 mx-auto p-2 mb-12" onSubmit={handleSubmit}>
           <input value={latitude}
                   onChange={ev => setLatitude(ev.target.value)}
                   type="text" placeholder="Latitude"
