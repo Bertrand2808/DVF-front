@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Formulaire from './Formulaire'
 
 function App() {
   return (
-    <Formulaire />
+    <BrowserRouter basename='/api/transactions'>
+      <Routes>
+        <Route path='/' element={<Formulaire />} />
+      </Routes>
+    </BrowserRouter>
   )
+
 }
 
 export default App
