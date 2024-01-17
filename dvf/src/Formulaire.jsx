@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {HomeModernIcon} from '@heroicons/react/24/outline'
 import logo from './assets/logo.png'
+
 export default function Formulaire() {
   const [latitude, setLatitude] = useState('')
   const [longitude, setLongitude] = useState('')
@@ -24,33 +26,28 @@ export default function Formulaire() {
     }
     return true
   }
+  const navigateTo = useNavigate(); // hook useHistory pour la navigation
   const handleSubmit = ev => {
-    ev.preventDefault()
-    if (!validateInput(rayon, 'rayon', 0, 100)) return
-    if (!validateInput(latitude, 'latitude', -90, 90)) return
-    if (!validateInput(longitude, 'longitude', -180, 180)) return
-    console.log('latitude', latitude)
-    console.log('longitude', longitude)
-    console.log('rayon', rayon)
+    ev.preventDefault();
+    if (!validateInput(rayon, 'rayon', 0, 100)) return;
+    if (!validateInput(latitude, 'latitude', -90, 90)) return;
+    if (!validateInput(longitude, 'longitude', -180, 180)) return;
 
-    const apiUrl = `http://localhost:8080/api/transactions`
-    const data = {latitude, longitude, rayon };
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
+    // Construire l'URL avec les paramètres de requête
+    const queryParam = new URLSearchParams({ latitude: latitude, longitude: longitude, rayon: rayon }).toString();
+    const apiUrl = `http://localhost:8080/api/transactions?${queryParam}`;
+
+    fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      navigateTo(`/transactions?${queryParam}`); // Redirection vers la nouvelle page
     })
     .catch((error) => {
       console.error('Error during process :', error);
     });
-
   }
+
 
   return (
     <div className=''>
