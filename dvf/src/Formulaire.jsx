@@ -29,7 +29,7 @@ export default function Formulaire() {
   const navigateTo = useNavigate(); // hook useHistory pour la navigation
   const handleSubmit = ev => {
     ev.preventDefault();
-    if (!validateInput(rayon, 'rayon', 0, 100)) return;
+    if (!validateInput(rayon, 'rayon', 0, 100000)) return;
     if (!validateInput(latitude, 'latitude', -90, 90)) return;
     if (!validateInput(longitude, 'longitude', -180, 180)) return;
 
@@ -41,7 +41,7 @@ export default function Formulaire() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
-      navigateTo(`/transactions?${queryParam}`); // Redirection vers la nouvelle page
+      navigateTo(`/resultats?${queryParam}`); // Redirection vers la nouvelle page
     })
     .catch((error) => {
       console.error('Error during process :', error);
@@ -97,7 +97,10 @@ export default function Formulaire() {
             <label htmlFor="default-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rayon</label>
             <input
                     onChange={ev => setRayon(ev.target.value)}
-                    id="default-range" type="range" value={rayon} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
+                    id="default-range" type="range" value={rayon}
+                    min="0"
+                    max="100000"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
           </div>
 
           <button className="bg-blue-500 text-white block w-full rounded-sm">Soumettre</button>
