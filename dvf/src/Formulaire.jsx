@@ -36,11 +36,10 @@ export default function Formulaire() {
     // Construire l'URL avec les paramètres de requête
     const queryParam = new URLSearchParams({ latitude: latitude, longitude: longitude, rayon: rayon }).toString();
     const apiUrl = `http://localhost:8080/api/transactions?${queryParam}`;
-
+    
     fetch(apiUrl)
-    .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      console.log('Success:', JSON.stringify(data));
       navigateTo(`/transactions?${queryParam}`); // Redirection vers la nouvelle page
     })
     .catch((error) => {
@@ -64,11 +63,11 @@ export default function Formulaire() {
             <input value={latitude}
                     onChange={ev => setLatitude(ev.target.value)}
                     type="text" placeholder=""
-                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700
-                    appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer"
+                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500
+                    appearance-none focus:outline-none focus:ring-0 peer"
                     id="floating_outlined"/>
             <label htmlFor="floating_outlined"
-                      className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                      className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
                         Latitude
               </label>
           </div>
@@ -76,10 +75,10 @@ export default function Formulaire() {
             <input value={longitude}
                     onChange={ev => setLongitude(ev.target.value)}
                     type="text" placeholder=""
-                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700
-                    appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer"/>
+                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500
+                    appearance-none focus:outline-none focus:ring-0 peer"/>
             <label htmlFor="floating_outlined"
-                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
                       Longitude
             </label>
           </div>
@@ -87,17 +86,17 @@ export default function Formulaire() {
             <input value={rayon}
                     onChange={ev => setRayon(ev.target.value)}
                     type="text" placeholder=""
-                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer"/>
+                    className="block w-full p-2 mb-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 appearance-none focus:outline-none focus:ring-0 peer"/>
             <label htmlFor="floating_outlined"
-                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
                       Rayon
             </label>
           </div>
           <div>
-            <label htmlFor="default-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rayon</label>
+            <label htmlFor="default-range" className="block mb-2 text-sm font-medium text-gray-900">Rayon</label>
             <input
                     onChange={ev => setRayon(ev.target.value)}
-                    id="default-range" type="range" value={rayon} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
+                    id="default-range" type="range" value={rayon} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"/>
           </div>
 
           <button className="bg-blue-500 text-white block w-full rounded-sm">Soumettre</button>
