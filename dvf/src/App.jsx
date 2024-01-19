@@ -3,7 +3,7 @@ import Formulaire from './Formulaire'
 
 function App() {
   return (
-    <BrowserRouter basename='/api/transactions'>
+    <BrowserRouter basename='/'>
       <Routes>
         <Route path='/' element={<Formulaire />} />
       </Routes>
