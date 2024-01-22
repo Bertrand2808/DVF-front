@@ -33,14 +33,12 @@ export default function Formulaire() {
     }
     return true;
   };
-  const navigateTo = useNavigate(); // hook useHistory pour la navigation
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
     if (!validateInput(rayon, "rayon", 0, 1000)) return;
     if (!validateInput(latitude, "latitude", -90, 90)) return;
     if (!validateInput(longitude, "longitude", -180, 180)) return;
 
-    // Construire l'URL avec les paramètres de requête
     const queryParam = new URLSearchParams({
       latitude: latitude,
       longitude: longitude,
@@ -48,14 +46,22 @@ export default function Formulaire() {
     }).toString();
     const apiUrl = `http://localhost:8080/api/transactions?${queryParam}`;
 
-    fetch(apiUrl)
-      .then((data) => {
-        console.log("Success:", JSON.stringify(data));
-        navigateTo(`/transactions?${queryParam}`); // Redirection vers la nouvelle page
-      })
-      .catch((error) => {
-        console.error("Error during process :", error);
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const pdfBlob = await response.blob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank");
+    } catch (e) {
+      console.log("Erreur lors de la génération du pdf : ", e);
+    }
   };
 
   const markerRef = useRef(null);
