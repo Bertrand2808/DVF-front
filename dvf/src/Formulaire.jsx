@@ -35,7 +35,7 @@ export default function Formulaire() {
   };
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    if (!validateInput(rayon, "rayon", 0, 1000)) return;
+    if (!validateInput(rayon, "rayon", 0, 10000)) return;
     if (!validateInput(latitude, "latitude", -90, 90)) return;
     if (!validateInput(longitude, "longitude", -180, 180)) return;
 
@@ -213,7 +213,7 @@ export default function Formulaire() {
               Rayon
             </label>
             <input
-              max={1000}
+              max={10000}
               min={0}
               onChange={(ev) => setRayon(ev.target.value)}
               id="default-range"
