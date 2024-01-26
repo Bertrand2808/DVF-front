@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeModernIcon } from "@heroicons/react/24/outline";
 import logo from "./assets/logo.png";
@@ -46,23 +46,54 @@ export default function Formulaire() {
     }).toString();
     const apiUrl = `http://localhost:8080/api/transactions?${queryParam}`;
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    fetch(apiUrl).then(response => {
+      if (response.ok) {
+          console.log("Requête de génération de PDF envoyée.");
+      } else {
+          console.error("Erreur lors de l'envoi de la requête.");
       }
-      const pdfBlob = await response.blob();
+    }).catch(error => {
+        console.error("Erreur lors de l'envoi de la requête:", error);
+    });
+  };
+  // Dans votre composant React
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8080/my-websocket-endpoint');
+
+    socket.onopen = function(event) {
+        console.log("WebSocket connection established:", event);
+    };
+
+    socket.onmessage = function(event) {
+      const base64Pdf = event.data;
+      const pdfBlob = base64ToBlob(base64Pdf, 'application/pdf');
       const pdfUrl = URL.createObjectURL(pdfBlob);
       window.open(pdfUrl, "_blank");
-    } catch (e) {
-      console.log("Erreur lors de la génération du pdf : ", e);
-    }
   };
+
+    socket.onerror = function(event) {
+        console.error("WebSocket error observed:", event);
+    };
+
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed:", event);
+    };
+
+    return () => {
+        socket.close();
+    };
+  }, []);
+
+  const base64ToBlob = (base64, contentType) => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], {type: contentType});
+  };
+
 
   const markerRef = useRef(null);
   const eventHandlers = useMemo(
