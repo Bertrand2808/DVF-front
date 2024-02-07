@@ -36,6 +36,7 @@ export default function Formulaire() {
   };
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+
     if (!validateInput(rayon, "rayon", 0, 10000)) return;
     if (!validateInput(latitude, "latitude", -90, 90)) return;
     if (!validateInput(longitude, "longitude", -180, 180)) return;
