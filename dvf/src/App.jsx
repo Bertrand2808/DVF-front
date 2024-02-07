@@ -4,7 +4,7 @@ import Resultats from "./Resultats";
 
 function App() {
   return (
-    <BrowserRouter basename='/api/transactions'>
+    <BrowserRouter basename='/'>
       <Routes>
         <Route path='/' element={<Formulaire />} />
         <Route path="/resultats" element={<Resultats />} />
