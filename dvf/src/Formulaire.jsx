@@ -8,6 +8,7 @@ import {
   Tooltip,
   Marker,
   Circle,
+  useMapEvents
 } from "react-leaflet";
 
 export default function Formulaire() {
@@ -96,7 +97,7 @@ export default function Formulaire() {
 
 
   const markerRef = useRef(null);
-  const eventHandlers = useMemo(
+  const eventHandlersMarker = useMemo(
     () => ({
       drag() {
         const marker = markerRef.current;
@@ -109,6 +110,19 @@ export default function Formulaire() {
     }),
     []
   );
+
+  function MyComponent() {
+    const map = useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        setLatitude(lat);
+        setLongitude(lng);
+        map.flyTo([lat, lng])
+      }
+    });
+    return null;
+  }
+  
 
   return (
     <div className="">
@@ -145,13 +159,14 @@ export default function Formulaire() {
           <Marker
             ref={markerRef}
             draggable={true}
-            eventHandlers={eventHandlers}
+            eventHandlers={eventHandlersMarker}
             position={[latitude, longitude]}
           >
             <Tooltip>
               <span>Position actuelle<br/>(Rester appuyer pour déplacer)</span>
             </Tooltip>
           </Marker>
+          <MyComponent/>
         </MapContainer>
         <form
           className="w-64 mx-auto p-2 mb-12 mt-4 max-w-sm"
