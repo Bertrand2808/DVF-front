@@ -15,6 +15,7 @@ export default function Formulaire() {
   const [latitude, setLatitude] = useState("45.75");
   const [longitude, setLongitude] = useState("4.85");
   const [rayon, setRayon] = useState("200");
+  const [circlePosition, setCirclePosition] = useState([latitude, longitude]); // Nouvel état pour stocker les coordonnées du cercle
   const validateInput = (value, name, min, max) => {
     if (value === "") {
       alert(`Le ${name} est obligatoire`);
@@ -100,13 +101,12 @@ export default function Formulaire() {
   const markerRef = useRef(null);
   const eventHandlersMarker = useMemo(
     () => ({
-      drag() {
-        const marker = markerRef.current;
-        if (marker != null) {
-          const newPosition = marker.getLatLng();
-          setLatitude(newPosition.lat);
-          setLongitude(newPosition.lng);
-        }
+      dragend(event) {
+        const marker = event.target;
+        const newPosition = marker.getLatLng();
+        setLatitude(newPosition.lat);
+        setLongitude(newPosition.lng);
+        setCirclePosition([newPosition.lat, newPosition.lng]);
       },
     }),
     []
@@ -118,6 +118,7 @@ export default function Formulaire() {
         const { lat, lng } = e.latlng;
         setLatitude(lat);
         setLongitude(lng);
+        setCirclePosition([lat, lng]);
         map.flyTo([lat, lng])
       }
     });
@@ -129,7 +130,7 @@ export default function Formulaire() {
     iconSize:     [25, 41], // size of the icon
     iconAnchor:   [13, 41], // point of the icon which will correspond to marker's location
   });
-  
+
 
   return (
     <div className="">
@@ -158,7 +159,7 @@ export default function Formulaire() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Circle center={[latitude, longitude]} color="#2a81ca" radius={rayon}>
+          <Circle center={circlePosition} color="#2a81ca" radius={rayon}>
             <Tooltip>
               <span>Rayon des transactions</span>
             </Tooltip>
