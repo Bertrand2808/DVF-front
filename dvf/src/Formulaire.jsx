@@ -123,6 +123,12 @@ export default function Formulaire() {
     });
     return null;
   }
+
+  var markerIcon = L.icon({
+    iconUrl: 'src/assets/markerIcon.png',
+    iconSize:     [25, 41], // size of the icon
+    iconAnchor:   [13, 41], // point of the icon which will correspond to marker's location
+  });
   
 
   return (
@@ -162,6 +168,7 @@ export default function Formulaire() {
             draggable={true}
             eventHandlers={eventHandlersMarker}
             position={[latitude, longitude]}
+            icon={markerIcon}
           >
             <Tooltip>
               <span>Position actuelle<br/>(Rester appuyer pour déplacer)</span>
