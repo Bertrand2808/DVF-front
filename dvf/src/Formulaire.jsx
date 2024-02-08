@@ -8,12 +8,14 @@ import {
   Tooltip,
   Marker,
   Circle,
+  useMapEvents
 } from "react-leaflet";
 
 export default function Formulaire() {
   const [latitude, setLatitude] = useState("45.75");
   const [longitude, setLongitude] = useState("4.85");
   const [rayon, setRayon] = useState("200");
+  const [circlePosition, setCirclePosition] = useState([latitude, longitude]); // Nouvel état pour stocker les coordonnées du cercle
   const validateInput = (value, name, min, max) => {
     if (value === "") {
       alert(`Le ${name} est obligatoire`);
@@ -97,19 +99,38 @@ export default function Formulaire() {
 
 
   const markerRef = useRef(null);
-  const eventHandlers = useMemo(
+  const eventHandlersMarker = useMemo(
     () => ({
-      drag() {
-        const marker = markerRef.current;
-        if (marker != null) {
-          const newPosition = marker.getLatLng();
-          setLatitude(newPosition.lat);
-          setLongitude(newPosition.lng);
-        }
+      dragend(event) {
+        const marker = event.target;
+        const newPosition = marker.getLatLng();
+        setLatitude(newPosition.lat);
+        setLongitude(newPosition.lng);
+        setCirclePosition([newPosition.lat, newPosition.lng]);
       },
     }),
     []
   );
+
+  function MyComponent() {
+    const map = useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        setLatitude(lat);
+        setLongitude(lng);
+        setCirclePosition([lat, lng]);
+        map.flyTo([lat, lng])
+      }
+    });
+    return null;
+  }
+
+  var markerIcon = L.icon({
+    iconUrl: 'src/assets/markerIcon.png',
+    iconSize:     [25, 41], // size of the icon
+    iconAnchor:   [13, 41], // point of the icon which will correspond to marker's location
+  });
+
 
   return (
     <div className="">
@@ -138,7 +159,7 @@ export default function Formulaire() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Circle center={[latitude, longitude]} color="#2a81ca" radius={rayon}>
+          <Circle center={circlePosition} color="#2a81ca" radius={rayon}>
             <Tooltip>
               <span>Rayon des transactions</span>
             </Tooltip>
@@ -146,13 +167,15 @@ export default function Formulaire() {
           <Marker
             ref={markerRef}
             draggable={true}
-            eventHandlers={eventHandlers}
+            eventHandlers={eventHandlersMarker}
             position={[latitude, longitude]}
+            icon={markerIcon}
           >
             <Tooltip>
               <span>Position actuelle<br/>(Rester appuyer pour déplacer)</span>
             </Tooltip>
           </Marker>
+          <MyComponent/>
         </MapContainer>
         <form
           className="w-64 mx-auto p-2 mb-12 mt-4 max-w-sm"
